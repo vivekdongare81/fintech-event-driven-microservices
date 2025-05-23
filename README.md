@@ -69,8 +69,8 @@ This project is a **microservices-based fintech platform** built using an **even
 git clone https://github.com/your-username/fintech-even-driven-microservices.git
 cd fintech-even-driven-microservices
 
-
-Future Plans:
+```
+**Future Plans:**
 
 Digital wallets
 Personal finance tools
