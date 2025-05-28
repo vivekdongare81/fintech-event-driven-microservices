@@ -1,6 +1,5 @@
 package com.devsoncall.accounts.service;
 
-import com.devsoncall.accounts.dto.AccountsDto;
 import com.devsoncall.accounts.dto.CustomerDto;
 
 public interface IAccountsService {
@@ -11,7 +10,7 @@ public interface IAccountsService {
    * @param mobileNumber - Input Mobile Number
    * @return Accounts Details based on a given mobileNumber
    */
-  AccountsDto fetchAccount(String mobileNumber);
+  CustomerDto fetchAccount(String mobileNumber);
 
   /**
    * @param customerDto - CustomerDto Object

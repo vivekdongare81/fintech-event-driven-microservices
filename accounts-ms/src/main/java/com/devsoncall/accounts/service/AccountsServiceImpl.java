@@ -12,6 +12,7 @@ import com.devsoncall.accounts.dto.CustomerDto;
 import com.devsoncall.accounts.entity.Accounts;
 import com.devsoncall.accounts.entity.Customer;
 import com.devsoncall.accounts.exceptions.CustomerExistsException;
+import com.devsoncall.accounts.exceptions.ResourceNotFoundException;
 import com.devsoncall.accounts.mapper.CustomerMapper;
 import com.devsoncall.accounts.repository.AccountsRepository;
 import com.devsoncall.accounts.repository.CustomerRepository;
@@ -36,7 +37,6 @@ public class AccountsServiceImpl implements IAccountsService {
    */
   @Override
   public void createAccount(CustomerDto customerDto) {
-
     Customer customer = CustomerMapper.mapToCustomer(customerDto, new Customer());
     Optional<Customer> optionalCustomer =
         customerRepo.findByMobileNumber(customer.getMobileNumber());
@@ -67,9 +67,9 @@ public class AccountsServiceImpl implements IAccountsService {
    * @param mobileNumber - Input Mobile Number
    * @return Accounts Details based on a given mobileNumber
    */
-  public AccountsDto fetchAccount(String accountNumber) {
+  public CustomerDto fetchAccount(String mobileNumber) {
     // TODO
-    return null;
+	 return null;
   }
 
   /**
