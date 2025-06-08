@@ -10,19 +10,23 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Getter @Setter @ToString @AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Accounts extends BaseEntity {
 
-  @Column(name = "customer_id")
-  private Long customerId;
-  
-  @Id
-  @Column(name = "account_number")
-  private Long accountNumber;
+	@Column(name = "customer_id")
+	private Long customerId;
 
-  @Column(name = "account_type")
-  private String accountType;
+	@Id
+	@Column(name = "account_number")
+	private Long accountNumber;
 
-  @Column(name = "branch_address")
-  private String branchAddress;
+	@Column(name = "account_type")
+	private String accountType;
+
+	@Column(name = "branch_address")
+	private String branchAddress;
 }

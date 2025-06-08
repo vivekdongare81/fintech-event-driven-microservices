@@ -1,4 +1,4 @@
-package com.devsoncall.accounts.entity;
+package com.devsoncall.cards.entity;
 
 import java.time.LocalDateTime;
 

@@ -4,6 +4,7 @@ package com.devsoncall.accounts.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,9 +19,12 @@ import com.devsoncall.accounts.dto.ResponseDto;
 import com.devsoncall.accounts.service.IAccountsService;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping(path = "api", produces = {MediaType.APPLICATION_JSON_VALUE})
+@AllArgsConstructor
+@Validated
 public class AccountsController {
     private IAccountsService iAccountsService;
 
@@ -33,7 +37,7 @@ public class AccountsController {
 	}
 	
 	@GetMapping("/fetch")
-	public ResponseEntity<CustomerDto> fetchAccountsDetails(@RequestParam String mobileNumber ){
+	public ResponseEntity<CustomerDto> fetchAccountsDetails(@RequestParam("mobileNumber") String mobileNumber ){
         CustomerDto customerDto = iAccountsService.fetchAccount(mobileNumber);
         return ResponseEntity
 				.status(HttpStatus.CREATED)
@@ -55,7 +59,7 @@ public class AccountsController {
 	}
 	
     @DeleteMapping("/delete")
-    public ResponseEntity<ResponseDto> deleteAccountDetails(@RequestParam String mobileNumber){
+    public ResponseEntity<ResponseDto> deleteAccountDetails(@RequestParam("mobileNumber") String mobileNumber){
     	 boolean isDeleted = iAccountsService.deleteAccount(mobileNumber);
          if(isDeleted) {
              return ResponseEntity

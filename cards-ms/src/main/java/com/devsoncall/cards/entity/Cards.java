@@ -1,6 +1,5 @@
-package com.devsoncall.accounts.entity;
+package com.devsoncall.cards.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,19 +16,20 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Customer extends BaseEntity {
-
+public class Cards extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "customer_id")
-	private Long customerId;
+	private Long cardId;
 
-	@Column(name = "name")
-	private String name;
-
-	@Column(name = "email")
-	private String email;
-
-	@Column(name = "mobile_number")
 	private String mobileNumber;
+
+	private String cardNumber;
+
+	private String cardType;
+
+	private int totalLimit;
+
+	private int amountUsed;
+
+	private int availableAmount;
 }

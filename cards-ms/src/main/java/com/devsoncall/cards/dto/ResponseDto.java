@@ -1,4 +1,4 @@
-package com.devsoncall.accounts.dto;
+package com.devsoncall.cards.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,8 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ResponseDto {
-
-  private String statusCode;
-
-  private String statusMsg;
+	private String statusCode;
+	
+	private String statusMsg;
 }
