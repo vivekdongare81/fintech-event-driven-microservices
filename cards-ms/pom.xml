@@ -12,6 +12,7 @@
 	<groupId>com.devsoncall</groupId>
 	<artifactId>cards</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+		<packaging>jar</packaging>
 	<name>cards</name>
 	<description>Microservice for cards</description>
 	<url />
@@ -92,6 +93,9 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<image>
+                        <name>devsoncall/${project.artifactId}:firstCards</name>
+                    </image>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
