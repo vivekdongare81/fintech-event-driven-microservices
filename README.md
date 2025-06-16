@@ -41,12 +41,13 @@ This project is a **microservices-based fintech platform** built using an **even
 
 | Service               | Port | Description                    |
 |-----------------------|------|--------------------------------|
-| API Gateway           | ---- | Entry point for all services   |
+| API Gateway           | 8080 | Entry point for all services   |
+| Account Service       | 8081 | Handles user accounts          |
+| Card Service          | 8082 | Handles cards                  |
+| Loan Service          | 8083 | Handles loans                  |
 | Eureka Server         | ---- | Service registry               |
-| Config Server         | ---- | Shared configuration           |
-| Account Service       | ---- | Handles user accounts          |
-| Card Service          | ---- | Handles cards                  |
-| Loan Service          | ---- | Handles loans                  |
+| Config Server         | 8090 | Shared configuration           |
+| Rabbit MQ Server      | 8091 | Alerts to all Microservices    |
 | Notification Service  | ---- | Event-driven notifications     |
 | Customer Service      | ---- | Central customer management    |
 
