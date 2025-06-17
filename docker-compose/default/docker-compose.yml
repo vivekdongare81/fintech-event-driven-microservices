@@ -1,6 +1,6 @@
-services:
-  rabbit:
-    image: rabbitmq:3.13-management
+services: 
+  rabbit: #RABBITMQ SERVER
+    image: rabbitmq:4-management
     hostname: rabbitmq
     ports:
       - "5672:5672"
@@ -15,7 +15,7 @@ services:
       file: common-config.yml
       service: network-deploy-service
 
-  configserver:
+  configserver: #CONFIG SERVER
     image: "devsoncall/configserver:configadded"
     container_name: configserver-ms
     ports:
@@ -33,7 +33,7 @@ services:
       file: common-config.yml
       service: microservice-base-config
 
-  accounts:
+  accounts: #ACCOUNTS SERVER
     image: "devsoncall/accounts:configadded"
     container_name: accounts-ms
     ports:
@@ -47,7 +47,7 @@ services:
       file: common-config.yml
       service: microservice-configserver-config
 
-  cards:
+  cards: #CARDS SERVER
     image: "devsoncall/cards:configadded"
     container_name: cards-ms
     ports:
@@ -61,7 +61,7 @@ services:
       file: common-config.yml
       service: microservice-configserver-config
       
-  loans:
+  loans: #LOANS SERVER
     image: "devsoncall/loans:configadded"
     container_name: loans-ms
     ports:
@@ -76,5 +76,5 @@ services:
       service: microservice-configserver-config
 
 networks:
-  eazybank:
+  devsoncallNetwork: #NETWORK name inside docker
     driver: "bridge"
