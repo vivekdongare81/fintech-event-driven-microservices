@@ -22,7 +22,7 @@ services:
     ports:
       - 8084:5432
     environment:
-      MYSQL_DATABASE: accountsdb #DB name 
+      POSTGRES_DB: accountsdb #DB name 
     extends:
       file: common-config.yml
       service: microservice-db-config
@@ -33,7 +33,7 @@ services:
     ports:
       - 8085:5432
     environment:
-      MYSQL_DATABASE: cardsdb #DB name
+      POSTGRES_DB: cardsdb #DB name
     extends:
       file: common-config.yml
       service: microservice-db-config
@@ -44,14 +44,14 @@ services:
     ports:
       - 8086:5432
     environment:
-      MYSQL_DATABASE: loansdb #DB name
+      POSTGRES_DB: loansdb #DB name
     extends:
       file: common-config.yml
       service: microservice-db-config
 
 ###################  Loans DB SERVICE ########################
   configserver: 
-    image: "devsoncall/configserver:v2.0.0"
+    image: "vivekd123/configserver:v2.0_addPostgresql"
     container_name: configserver-ms
     ports:
       - "8090:8090"
@@ -70,7 +70,7 @@ services:
       
 ###################  ACCOUNTS SERVICE ########################
   accounts: 
-    image: "devsoncall/accounts:v2.0.0"
+    image: "vivekd123/accounts:v2.0_addPostgresql"
     container_name: accounts-ms
     ports:
       - "8081:8081"
@@ -88,7 +88,7 @@ services:
 
 ###################  CARDS SERVICE ########################
   cards: 
-    image: "devsoncall/cards:v2.0.0"
+    image: "vivekd123/cards:v2.0_addPostgresql"
     container_name: cards-ms
     ports:
       - "8082:8082"
@@ -106,7 +106,7 @@ services:
 
 ###################  LOANS SERVER ########################      
   loans: 
-    image: "devsoncall/loans:v2.0.0"
+    image: "vivekd123/loans:v2.0_addPostgresql"
     container_name: loans-ms
     ports:
       - "8083:8083"
