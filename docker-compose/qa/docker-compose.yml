@@ -1,5 +1,6 @@
-services:
-  rabbit: #RABBITMQ SERVER
+services: 
+###################  RabbitMQ SERVICE ########################
+  rabbit: 
     image: rabbitmq:4-management
     hostname: rabbitmq
     ports:
@@ -14,17 +15,51 @@ services:
     extends:
       file: common-config.yml
       service: network-deploy-service
+      
+###################  Accounts DB SERVICE ########################
+  accountsdb: 
+    container_name: accountsdb-ms
+    ports:
+      - 8084:5432
+    environment:
+      MYSQL_DATABASE: accountsdb #DB name 
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
+      
+###################  Cards DB SERVICE ########################
+  cardsdb:
+    container_name: cardsdb-ms
+    ports:
+      - 8085:5432
+    environment:
+      MYSQL_DATABASE: cardsdb #DB name
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
+      
+###################  Loans DB SERVER ########################      
+  loansdb:
+    container_name: loansdb-ms
+    ports:
+      - 8086:5432
+    environment:
+      MYSQL_DATABASE: loansdb #DB name
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
 
-  configserver: #CONFIG SERVER
-    image: "eazybytes/configserver:configadded"
+###################  Loans DB SERVICE ########################
+  configserver: 
+    image: "devsoncall/configserver:v2.0.0"
     container_name: configserver-ms
     ports:
-      - "8071:8071"
+      - "8090:8090"
     depends_on:
       rabbit:
         condition: service_healthy
     healthcheck:
-      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
       timeout: 5s
       retries: 10
@@ -32,49 +67,62 @@ services:
     extends:
       file: common-config.yml
       service: microservice-base-config
-
-  accounts: #ACCOUNTS SERVER
-    image: "eazybytes/accounts:configadded"
+      
+###################  ACCOUNTS SERVICE ########################
+  accounts: 
+    image: "devsoncall/accounts:v2.0.0"
     container_name: accounts-ms
     ports:
-      - "8080:8080"
+      - "8081:8081"
     depends_on:
       configserver:
         condition: service_healthy
+      accountsdb:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "accounts"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://accountsdb:5432/accountsdb" #JDBC protocol-host-port-db)
     extends:
       file: common-config.yml
       service: microservice-configserver-config
 
-  cards: #CARDS SERVER
-    image: "eazybytes/cards:configadded"
+###################  CARDS SERVICE ########################
+  cards: 
+    image: "devsoncall/cards:v2.0.0"
     container_name: cards-ms
     ports:
-      - "9000:9000"
+      - "8082:8082"
     depends_on:
       configserver:
         condition: service_healthy
+      cardsdb:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "cards"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://cardsdb:5432/cardsdb" #JDBC protocol-host-port-db)
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
+###################  LOANS SERVER ########################      
+  loans: 
+    image: "devsoncall/loans:v2.0.0"
+    container_name: loans-ms
+    ports:
+      - "8083:8083"
+    depends_on:
+      configserver:
+        condition: service_healthy
+      loansdb:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "loans"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://loansdb:5432/loansdb" #JDBC protocol-host-port-db)
     extends:
       file: common-config.yml
       service: microservice-configserver-config
       
-  loans: #LOANS SERVER
-    image: "eazybytes/loans:configadded"
-    container_name: loans-ms
-    ports:
-      - "8090:8090"
-    depends_on:
-      configserver:
-        condition: service_healthy
-    environment:
-      SPRING_APPLICATION_NAME: "loans"
-    extends:
-      file: common-config.yml
-      service: microservice-configserver-config
-
+###################  Others ########################
 networks:
   devsoncallNetwork: #NETWORK name inside docker
     driver: "bridge"

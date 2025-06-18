@@ -5,7 +5,7 @@ spring:
   application:
     name: "loans"
   datasource:
-    url: jdbc:postgresql://localhost:8086/loansdb
+    url: jdbc:postgresql://localhost:8086/loansdb #fallback -gets Overidden when used docker-compose by loans:8086
     driver-class-name: org.postgresql.Driver
     username: root
     password: root
@@ -17,10 +17,10 @@ spring:
     show-sql: true
 
   config:
-    import: "optional:configserver:http://localhost:8090/"
+    import: "optional:configserver:http://localhost:8090/" #fallback -gets Overidden when used docker-compose by configserver:8086
 
   rabbitmq:
-    host: localhost
+    host: localhost #fallback in docker-compose
     port: 5672
     username: guest
     password: guest

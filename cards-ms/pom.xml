@@ -148,7 +148,7 @@
 				<version>3.4.2</version>
 				<configuration>
 					<to>
-						<image>devsoncall/${project.artifactId}:configadded</image>
+						<image>devsoncall/${project.artifactId}:v2.0_addPostgresql</image>
 					</to>
 				</configuration>
 			</plugin>

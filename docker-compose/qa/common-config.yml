@@ -1,8 +1,10 @@
 services:
+############### Common Network SERVICE ##################
   network-deploy-service:
     networks:
       - devsoncallNetwork
-
+      
+############### Microservices base Configs ##############
   microservice-base-config:
     extends:
       service: network-deploy-service
@@ -13,9 +15,25 @@ services:
     environment:
       SPRING_RABBITMQ_HOST: "rabbit"
 
+############### Base + Config-Server configs  #############
   microservice-configserver-config:
     extends:
       service: microservice-base-config
     environment:
-      SPRING_PROFILES_ACTIVE: qa
-      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      SPRING_PROFILES_ACTIVE: qa # ACTIVE-PROFILE
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8090/
+
+#################### DB Configs #######################
+  microservice-db-config:
+    extends:
+      service: network-deploy-service
+    image: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      timeout: 10s
+      retries: 10
+      interval: 10s
+      start_period: 10s
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
