@@ -18,7 +18,7 @@ services:
       
 ###################  Accounts DB SERVICE ########################
   accountsdb: 
-    container_name: accountsdb-ms
+    container_name: accountsdb-cnt
     ports:
       - 8084:5432
     environment:
@@ -29,7 +29,7 @@ services:
       
 ###################  Cards DB SERVICE ########################
   cardsdb:
-    container_name: cardsdb-ms
+    container_name: cardsdb-cnt
     ports:
       - 8085:5432
     environment:
@@ -40,7 +40,7 @@ services:
       
 ###################  Loans DB SERVER ########################      
   loansdb:
-    container_name: loansdb-ms
+    container_name: loansdb-cnt
     ports:
       - 8086:5432
     environment:
@@ -49,10 +49,10 @@ services:
       file: common-config.yml
       service: microservice-db-config
 
-###################  Loans DB SERVICE ########################
+###################  Config SERVICE ########################
   configserver: 
-    image: "vivekd123/configserver:v2.0_addPostgresql"
-    container_name: configserver-ms
+    image: "devsoncall/configserver:v3.0_addEureka" # TODO - PUSH iamges & replace with vivekd123 in end
+    container_name: configserver-cnt
     ports:
       - "8090:8090"
     depends_on:
@@ -68,10 +68,29 @@ services:
       file: common-config.yml
       service: microservice-base-config
       
+###################  Eureka SERVICE ########################
+  eurekaserver:
+      image: "devsoncall/eurekaserver:v3.0_addEureka" # TODO - PUSH iamges & replace with vivekd123 in end
+      container_name: "eurekaserver-cnt"
+      ports: 
+        - "8092:8092"
+      depends_on:
+        configserver:
+          condition: service_healthy
+      healthcheck:
+        test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
+        interval: 10s
+        timeout: 5s
+        retries: 10
+        start_period: 10s
+      extends:
+        file: common-config.yml
+        service: microservice-configserver-config
+      
 ###################  ACCOUNTS SERVICE ########################
   accounts: 
-    image: "vivekd123/accounts:v2.0_addPostgresql"
-    container_name: accounts-ms
+    image: "devsoncall/accounts:v3.0_addEureka" # TODO - PUSH iamges & replace with vivekd123 in end
+    container_name: accounts-cnt
     ports:
       - "8081:8081"
     depends_on:
@@ -84,12 +103,12 @@ services:
       SPRING_DATASOURCE_URL: "jdbc:postgresql://accountsdb:5432/accountsdb" #JDBC protocol-host-port-db)
     extends:
       file: common-config.yml
-      service: microservice-configserver-config
+      service: microservice-eureka-config
 
 ###################  CARDS SERVICE ########################
   cards: 
-    image: "vivekd123/cards:v2.0_addPostgresql"
-    container_name: cards-ms
+    image: "devsoncall/cards:v3.0_addEureka" # TODO - PUSH iamges & replace with vivekd123 in end
+    container_name: cards-cnt
     ports:
       - "8082:8082"
     depends_on:
@@ -102,12 +121,12 @@ services:
       SPRING_DATASOURCE_URL: "jdbc:postgresql://cardsdb:5432/cardsdb" #JDBC protocol-host-port-db)
     extends:
       file: common-config.yml
-      service: microservice-configserver-config
+      service: microservice-eureka-config
 
 ###################  LOANS SERVER ########################      
   loans: 
-    image: "vivekd123/loans:v2.0_addPostgresql"
-    container_name: loans-ms
+    image: "devsoncall/loans:v3.0_addEureka" # TODO - PUSH iamges & replace with vivekd123 in end
+    container_name: loans-cnt
     ports:
       - "8083:8083"
     depends_on:
@@ -120,7 +139,7 @@ services:
       SPRING_DATASOURCE_URL: "jdbc:postgresql://loansdb:5432/loansdb" #JDBC protocol-host-port-db)
     extends:
       file: common-config.yml
-      service: microservice-configserver-config
+      service: microservice-eureka-config
       
 ###################  Others ########################
 networks:

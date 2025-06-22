@@ -4,7 +4,22 @@ services:
     networks:
       - devsoncallNetwork
       
-############### Microservices base Configs ##############
+#################### Net + DB Configs #######################
+  microservice-db-config:
+    extends:
+      service: network-deploy-service
+    image: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      timeout: 10s
+      retries: 10
+      interval: 10s
+      start_period: 10s
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      
+############### Net + Base Configs ##############
   microservice-base-config:
     extends:
       service: network-deploy-service
@@ -23,17 +38,10 @@ services:
       SPRING_PROFILES_ACTIVE: qa # ACTIVE-PROFILE
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8090/
 
-#################### DB Configs #######################
-  microservice-db-config:
+############### Config-Server + Eureka  #############
+  microservice-eureka-config:
     extends:
-      service: network-deploy-service
-    image: postgres
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      timeout: 10s
-      retries: 10
-      interval: 10s
-      start_period: 10s
+      service: microservice-configserver-config
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+

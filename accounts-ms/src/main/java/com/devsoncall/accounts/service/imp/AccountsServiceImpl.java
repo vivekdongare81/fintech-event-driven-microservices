@@ -1,4 +1,4 @@
-package com.devsoncall.accounts.service;
+package com.devsoncall.accounts.service.imp;
 
 import java.util.Optional;
 import java.util.Random;
@@ -16,6 +16,7 @@ import com.devsoncall.accounts.mapper.AccountsMapper;
 import com.devsoncall.accounts.mapper.CustomerMapper;
 import com.devsoncall.accounts.repository.AccountsRepository;
 import com.devsoncall.accounts.repository.CustomerRepository;
+import com.devsoncall.accounts.service.IAccountsService;
 
 import lombok.AllArgsConstructor;
 

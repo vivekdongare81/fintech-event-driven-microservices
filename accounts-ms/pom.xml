@@ -101,8 +101,22 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-bus-amqp</artifactId>
 		</dependency>
+		
+		<!-- Eureka Service Discovery Client  -->
+     	<dependency>
+      		<groupId>org.springframework.cloud</groupId>
+      		<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+   		 </dependency>
+		
+		<!-- ISpring Cloud Routing - nternal Microservices Communication  -->
+		 <dependency>
+      		<groupId>org.springframework.cloud</groupId>
+      		<artifactId>spring-cloud-starter-openfeign</artifactId>
+    	</dependency>   	 
+   	 
     </dependencies>
-    
+
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -147,7 +161,7 @@
 				<version>3.4.2</version>
 				<configuration>
 					<to>
-						<image>devsoncall/${project.artifactId}:v2.0_addPostgresql</image>
+						<image>devsoncall/${project.artifactId}:v3.0_addEureka</image>
 					</to>
 				</configuration>
 			</plugin>

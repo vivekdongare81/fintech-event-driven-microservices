@@ -1,12 +1,19 @@
 package com.devsoncall.accounts.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
 public class AccountsDto {
-  private Long accountNumber;
+	
+    @NotEmpty(message = "AccountNumber can not be a null or empty")
+    @Pattern(regexp="(^$|[0-9]{10})",message = "AccountNumber must be 10 digits")
+    private Long accountNumber;
 
-  private String accountType;
+    @NotEmpty(message = "AccountType can not be a null or empty")
+    private String accountType;
 
-  private String branchAddress;
+    @NotEmpty(message = "BranchAddress can not be a null or empty")
+    private String branchAddress;
 }
