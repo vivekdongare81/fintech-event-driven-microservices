@@ -18,3 +18,10 @@ management:
     health:
       probes:
         enabled: true
+  metrics: # set Name for Micrometer metrics date
+    tags:
+      application: ${spring.application.name}
+
+logging: #OpenTelemetry
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"

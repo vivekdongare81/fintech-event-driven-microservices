@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: "cards"
+  profiles:
+    active: "prod"
   datasource:
     url: jdbc:postgresql://localhost:8085/cardsdb #fallback -gets Overidden when used docker-compose by cards:8085
     driver-class-name: org.postgresql.Driver
@@ -30,12 +32,23 @@ management:
     web:
       exposure:
         include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
   endpoint:
     shutdown:
       access: unrestricted
+    health:
+      probes:
+        enabled: true
   info:
     env:
       enabled: true
+  metrics: # set Name for Micrometer metrics date
+    tags:
+      application: ${spring.application.name}
       
 eureka:
   instance:
@@ -57,3 +70,6 @@ logging:
     com:
       devsoncall:
         cards: DEBUG
+  pattern: #OpenTelemetry
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+  

@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: "accounts"
+  profiles:
+    active: "prod"
   datasource:
     url: jdbc:postgresql://localhost:8084/accountsdb #fallback -gets Overidden when used docker-compose by accounts:8084
     driver-class-name: org.postgresql.Driver
@@ -18,7 +20,12 @@ spring:
 
   config:
     import: "optional:configserver:http://localhost:8090/" #fallback -gets Overidden when used docker-compose by configserver:8090
-
+  
+  cloud: # Set Circut Breaker for Feign Client
+    openfeign:
+      circuitbreaker:
+        enabled: true
+        
   rabbitmq:
     host: localhost  #fallback in docker-compose
     port: 5672
@@ -65,6 +72,9 @@ logging:
     com:
       devsoncall:
         accounts: DEBUG
+  pattern: #OpenTelemetry
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+
 
 resilience4j.circuitbreaker:
   configs:

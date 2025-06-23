@@ -13,25 +13,31 @@ spring:
               lower-case-service-id: true
           httpclient:
             connect-timeout: 1000
-            response-timeout: 2s
+            response-timeout: 20s # <= Adjust timeout
   data:
-    redis:
+    redis: #Redis for Rate Limitter
       connect-timeout: 2s
       host: localhost
       port: 6379
-      timeout: 1s 
+      timeout: 1s
               
 management:
   endpoints:
     web:
       exposure:
         include: "*"
-  endpoint:
-    gateway:
-      access: unrestricted
-  info:
-    env:
+  health:
+    readiness-state:
       enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  metrics: # set Name for Micrometer metrics date
+    tags:
+      application: ${spring.application.name}
 
 info:
   app:
@@ -42,8 +48,11 @@ info:
 logging:
   level:
     com:
-      eazybytes:
+      devsoncall:
         gatewayserver: DEBUG
+  pattern: #OpenTelemetry
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+
         
 resilience4j.circuitbreaker:
   configs:
