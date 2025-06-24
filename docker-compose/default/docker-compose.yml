@@ -1,4 +1,18 @@
 services:
+ ###################  Keyclock Oauth Server ########################
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.7
+    container_name: keycloak
+    ports:
+      - "8070:8080"
+    environment:
+      KEYCLOAK_ADMIN: "admin"
+      KEYCLOAK_ADMIN_PASSWORD: "admin"
+    command: "start-dev"
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+      
   read:
     image: grafana/loki:3.1.2
     command: "-config.file=/etc/loki/config.yaml -target=read"
@@ -328,7 +342,7 @@ services:
     image: "devsoncall/accounts:v4.0_gateway" # TODO - PUSH iamges & replace with vivekd123 in end
     container_name: accounts-cnt
     ports:
-      - "8081:8081"
+      - "8081:8081" #TODO-Delete to Hide ms in Docker
     depends_on:
       configserver:
         condition: service_healthy
@@ -353,7 +367,7 @@ services:
     image: "devsoncall/cards:v4.0_gateway" # TODO - PUSH iamges & replace with vivekd123 in end
     container_name: cards-cnt
     ports:
-      - "8082:8082"
+      - "8082:8082"  #TODO-Delete to Hide ms in Docker
     depends_on:
       configserver:
         condition: service_healthy
@@ -378,7 +392,7 @@ services:
     image: "devsoncall/loans:v4.0_gateway" # TODO - PUSH iamges & replace with vivekd123 in end
     container_name: loans-cnt
     ports:
-      - "8083:8083"
+      - "8083:8083"  #TODO-Delete to Hide ms in Docker
     depends_on:
       configserver:
         condition: service_healthy
@@ -418,7 +432,8 @@ services:
       SPRING_APPLICATION_NAME: "gatewayserver"
       OTEL_SERVICE_NAME: "gatewayserver"
       SPRING_DATA_REDIS_HOST: redis
-      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_PORT: 6379   #Integrate Oauth
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: "http://keycloak:8080/realms/master/protocol/openid-connect/certs"
     extends:
       file: common-config.yml
       service: microservice-eureka-config
