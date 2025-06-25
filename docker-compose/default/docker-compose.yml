@@ -13,6 +13,28 @@ services:
       file: common-config.yml
       service: network-deploy-service
       
+###################  Kafka service ########################
+  kafka:
+    image: docker.io/bitnami/kafka:3.9
+    ports:
+      - "9092:9092"
+    volumes:
+      - "kafka_data:/bitnami"
+    environment:
+      # KRaft settings
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      # Listeners
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+          
   read:
     image: grafana/loki:3.1.2
     command: "-config.file=/etc/loki/config.yaml -target=read"
@@ -248,7 +270,7 @@ services:
 ###################  Redis SERVICE ########################
   redis:
     image: redis
-    container_name: redis-cnt
+    container_name: redis-ms
     ports:
       - "6379:6379"
     healthcheck:
@@ -262,7 +284,7 @@ services:
       
 ###################  Accounts DB SERVICE ########################
   accountsdb: 
-    container_name: accountsdb-cnt
+    container_name: accountsdb-ms
     ports:
       - 8084:5432
     environment:
@@ -273,7 +295,7 @@ services:
       
 ###################  Cards DB SERVICE ########################
   cardsdb:
-    container_name: cardsdb-cnt
+    container_name: cardsdb-ms
     ports:
       - 8085:5432
     environment:
@@ -284,7 +306,7 @@ services:
       
 ###################  Loans DB SERVER ########################      
   loansdb:
-    container_name: loansdb-cnt
+    container_name: loansdb-ms
     ports:
       - 8086:5432
     environment:
@@ -295,8 +317,8 @@ services:
 
 ###################  Config SERVICE ########################
   configserver: 
-    image: "devsoncall/configserver:v4.0_gateway" # TODO - PUSH iamges & replace with vivekd123 in end
-    container_name: configserver-cnt
+    image: "devsoncall/configserver:v5.0_messagingServer" # TODO - PUSH iamges & replace with vivekd123 in end
+    container_name: configserver-ms
     ports:
       - "8090:8090"
     depends_on:
@@ -317,8 +339,8 @@ services:
 ###################  Eureka SERVICE ########################
 
   eurekaserver:
-    image: "devsoncall/eurekaserver:v4.0_gateway" # TODO - PUSH iamges & replace with vivekd123 in end
-    container_name: "eurekaserver-cnt"
+    image: "devsoncall/eurekaserver:v5.0_messagingServer" # TODO - PUSH iamges & replace with vivekd123 in end
+    container_name: eurekaserver-ms
     ports: 
        - "8092:8092"
     depends_on:
@@ -339,8 +361,8 @@ services:
       
 ###################  ACCOUNTS SERVICE ########################
   accounts: 
-    image: "devsoncall/accounts:v4.0_gateway" # TODO - PUSH iamges & replace with vivekd123 in end
-    container_name: accounts-cnt
+    image: "devsoncall/accounts:v5.0_messagingServer" # TODO - PUSH iamges & replace with vivekd123 in end
+    container_name: accounts-ms
     ports:
       - "8081:8081" #TODO-Delete to Hide ms in Docker
     depends_on:
@@ -358,14 +380,15 @@ services:
       SPRING_APPLICATION_NAME: "accounts"
       OTEL_SERVICE_NAME: "accounts"
       SPRING_DATASOURCE_URL: "jdbc:postgresql://accountsdb:5432/accountsdb" #JDBC protocol-host-port-db)
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: "kafka:9092"   
     extends:
       file: common-config.yml
       service: microservice-eureka-config
 
 ###################  CARDS SERVICE ########################
   cards: 
-    image: "devsoncall/cards:v4.0_gateway" # TODO - PUSH iamges & replace with vivekd123 in end
-    container_name: cards-cnt
+    image: "devsoncall/cards:v5.0_messagingServer" # TODO - PUSH iamges & replace with vivekd123 in end
+    container_name: cards-ms
     ports:
       - "8082:8082"  #TODO-Delete to Hide ms in Docker
     depends_on:
@@ -389,8 +412,8 @@ services:
 
 ###################  LOANS SERVER ########################      
   loans: 
-    image: "devsoncall/loans:v4.0_gateway" # TODO - PUSH iamges & replace with vivekd123 in end
-    container_name: loans-cnt
+    image: "devsoncall/loans:v5.0_messagingServer" # TODO - PUSH iamges & replace with vivekd123 in end
+    container_name: loans-ms
     ports:
       - "8083:8083"  #TODO-Delete to Hide ms in Docker
     depends_on:
@@ -411,12 +434,23 @@ services:
     extends:
       file: common-config.yml
       service: microservice-eureka-config
+
+###################  Messaging Server using Kafka ########################
+
+  messagingserver:
+    image: "devsoncall/messagingserver:v5.0_messagingServer"
+    container_name: message-ms
+    environment:
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: "kafka:9092"
+    extends:
+      file: common-config.yml
+      service: network-deploy-service 
       
 ###################  Gateway Server ########################
       
   gatewayserver:
-    image: "devsoncall/gatewayserver:v4.0_gateway"
-    container_name: gatewayserver-cnt
+    image: "devsoncall/gatewayserver:v5.0_messagingServer"
+    container_name: gatewayserver-ms
     ports:
       - "8080:8080"
     depends_on:
@@ -439,7 +473,11 @@ services:
       service: microservice-eureka-config
       
  ###################  Others ########################
-     
+
+volumes: 
+  kafka_data:
+    driver: local
+    
 networks:
   devsoncallNetwork: #NETWORK name inside docker
     driver: "bridge"

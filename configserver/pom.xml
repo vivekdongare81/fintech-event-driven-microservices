@@ -102,7 +102,7 @@
 				<version>3.4.2</version>
 				<configuration>
 					<to>
-						<image>devsoncall/${project.artifactId}:v4.0_gateway</image>
+						<image>devsoncall/${project.artifactId}:v5.0_messagingServer</image>
 					</to>
 				</configuration>
 			</plugin>

@@ -27,16 +27,22 @@ spring:
         enabled: true
     function:   # Async Messaging thru Broker
       definition: updateCommunication
+      
     stream:
+      defaultBinder: kafka   # ✅ Tell Spring to use Kafka, not RabbitMQ as we have both
       bindings:
         updateCommunication-in-0:
           destination: communication-sent
           group: ${spring.application.name}
         sendCommunication-out-0:
           destination: send-communication
-              
+          
+      kafka: #Kafka as a Messaging broker
+        binder:
+          brokers:
+            - localhost:9092        
   rabbitmq:
-    host: localhost  #fallback in docker-compose
+    host: localhost  #RabbitMQ for RateLimiting fallback
     port: 5672
     username: guest
     password: guest

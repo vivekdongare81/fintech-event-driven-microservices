@@ -140,10 +140,10 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-stream</artifactId>
 		</dependency>
-	<!-- Stream binder for RabbitMQ -->
+	<!-- Stream binder for Kafka or RabbitMQ -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+			<artifactId>spring-cloud-stream-binder-kafka</artifactId>
 		</dependency>
 
     </dependencies>
@@ -193,7 +193,7 @@
 				<version>3.4.2</version>
 				<configuration>
 					<to>
-						<image>devsoncall/${project.artifactId}:v4.0_gateway</image>
+						<image>devsoncall/${project.artifactId}:v5.0_messagingServer</image>
 					</to>
 				</configuration>
 			</plugin>
