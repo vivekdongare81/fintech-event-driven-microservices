@@ -21,16 +21,26 @@ spring:
   config:
     import: "optional:configserver:http://localhost:8090/" #fallback -gets Overidden when used docker-compose by configserver:8090
   
-  cloud: # Set Circut Breaker for Feign Client
-    openfeign:
+  cloud:
+    openfeign:  # Set Circut Breaker for Feign Client
       circuitbreaker:
         enabled: true
-        
+    function:   # Async Messaging thru Broker
+      definition: updateCommunication
+    stream:
+      bindings:
+        updateCommunication-in-0:
+          destination: communication-sent
+          group: ${spring.application.name}
+        sendCommunication-out-0:
+          destination: send-communication
+              
   rabbitmq:
     host: localhost  #fallback in docker-compose
     port: 5672
     username: guest
     password: guest
+    connection-timeout: 10s
 
 management:
   endpoints:

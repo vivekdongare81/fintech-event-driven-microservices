@@ -3,10 +3,14 @@ package com.devsoncall.accounts.service.imp;
 import java.util.Optional;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 import com.devsoncall.accounts.constants.AccountsConstants;
 import com.devsoncall.accounts.dto.AccountsDto;
+import com.devsoncall.accounts.dto.AccountsMsgDto;
 import com.devsoncall.accounts.dto.CustomerDto;
 import com.devsoncall.accounts.entity.Accounts;
 import com.devsoncall.accounts.entity.Customer;
@@ -24,8 +28,11 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AccountsServiceImpl implements IAccountsService {
 
+  private static final Logger log = LoggerFactory.getLogger(AccountsServiceImpl.class);
+    
   private AccountsRepository accountsRepo;
   private CustomerRepository customerRepo;
+  private final StreamBridge streamBridge; // any messaging broker bridge
 
   /** @param customerDto - CustomerDto Object */
   @Override
@@ -40,7 +47,10 @@ public class AccountsServiceImpl implements IAccountsService {
               + ", please try with different number.");
     }
     Customer savedCustomer = customerRepo.save(customer);
-    accountsRepo.save(createNewAccount(savedCustomer));
+    Accounts savedAccount = accountsRepo.save(createNewAccount(savedCustomer));
+    
+    sendCommunication(savedAccount, savedCustomer); // Async Messaging thru Broker
+
   }
 
   /**
@@ -111,4 +121,33 @@ public class AccountsServiceImpl implements IAccountsService {
     accountsRepo.deleteById(customer.getCustomerId());
     return true;
   }
+  
+  private void sendCommunication(Accounts account, Customer customer) {
+      var accountsMsgDto = new AccountsMsgDto(account.getAccountNumber(), customer.getName(),
+              customer.getEmail(), customer.getMobileNumber());
+      log.info("Sending Communication request for the details: {}", accountsMsgDto);
+      var result = streamBridge.send("sendCommunication-out-0", accountsMsgDto);
+      log.info("Is the Communication request successfully triggered ? : {}", result);
+  }
+  
+
+  /**
+   * @param accountNumber - Long
+   * @return boolean indicating if the update of communication status is successful or not
+   */
+  @Override
+  public boolean updateCommunicationStatus(Long accountNumber) {
+      boolean isUpdated = false;
+      if(accountNumber !=null ){
+          Accounts accounts = accountsRepo.findById(accountNumber).orElseThrow(
+                  () -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber.toString())
+          );
+          accounts.setCommunicationStatus(true);
+          accountsRepo.save(accounts);
+          isUpdated = true;
+      }
+      return  isUpdated;
+  }
+
+  
 }

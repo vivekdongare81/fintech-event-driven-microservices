@@ -134,6 +134,17 @@
 			<version>${otelVersion}</version>
 			<scope>runtime</scope>
 		</dependency>
+		
+<!-- Spring Stream for all messaging services  - includes Spring Cloud Functions -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream</artifactId>
+		</dependency>
+	<!-- Stream binder for RabbitMQ -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+		</dependency>
 
     </dependencies>
 
