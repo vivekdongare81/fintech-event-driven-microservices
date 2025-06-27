@@ -1,0 +1,27 @@
+dependencies:
+- name: devsoncall-common
+  repository: file://../../devsoncall-common
+  version: 0.1.0
+- name: configserver
+  repository: file://../../devsoncall-services/configserver
+  version: 0.1.0
+- name: eurekaserver
+  repository: file://../../devsoncall-services/eurekaserver
+  version: 0.1.0
+- name: accounts
+  repository: file://../../devsoncall-services/accounts
+  version: 0.1.0
+- name: cards
+  repository: file://../../devsoncall-services/cards
+  version: 0.1.0
+- name: loans
+  repository: file://../../devsoncall-services/loans
+  version: 0.1.0
+- name: gatewayserver
+  repository: file://../../devsoncall-services/gatewayserver
+  version: 0.1.0
+- name: messagingserver
+  repository: file://../../devsoncall-services/messagingserver
+  version: 0.1.0
+digest: sha256:9f85b2032067b080f552af764f201eb81102be281172bd5e7be8c623a07ba026
+generated: "2025-06-26T21:04:23.799547431+05:30"
