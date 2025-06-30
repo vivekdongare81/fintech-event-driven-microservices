@@ -1,27 +1,27 @@
 dependencies:
-- name: eazybank-common
-  repository: file://../../eazybank-common
+- name: devsoncall-common
+  repository: file://../../devsoncall-common
   version: 0.1.0
 - name: configserver
-  repository: file://../../eazybank-services/configserver
+  repository: file://../../devsoncall-services/configserver
   version: 0.1.0
 - name: eurekaserver
-  repository: file://../../eazybank-services/eurekaserver
+  repository: file://../../devsoncall-services/eurekaserver
   version: 0.1.0
 - name: accounts
-  repository: file://../../eazybank-services/accounts
+  repository: file://../../devsoncall-services/accounts
   version: 0.1.0
 - name: cards
-  repository: file://../../eazybank-services/cards
+  repository: file://../../devsoncall-services/cards
   version: 0.1.0
 - name: loans
-  repository: file://../../eazybank-services/loans
+  repository: file://../../devsoncall-services/loans
   version: 0.1.0
 - name: gatewayserver
-  repository: file://../../eazybank-services/gatewayserver
+  repository: file://../../devsoncall-services/gatewayserver
   version: 0.1.0
-- name: message
-  repository: file://../../eazybank-services/message
+- name: messagingserver
+  repository: file://../../devsoncall-services/messagingserver
   version: 0.1.0
-digest: sha256:d9aec855311f72286a711322734358fd90d61e7ab0e8ef80dea05b637e020544
-generated: "2023-09-01T12:06:31.531688+05:30"
+digest: sha256:9f85b2032067b080f552af764f201eb81102be281172bd5e7be8c623a07ba026
+generated: "2025-06-30T12:30:30.985415968+05:30"

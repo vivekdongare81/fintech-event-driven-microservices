@@ -24,4 +24,4 @@ dependencies:
   repository: file://../../devsoncall-services/messagingserver
   version: 0.1.0
 digest: sha256:9f85b2032067b080f552af764f201eb81102be281172bd5e7be8c623a07ba026
-generated: "2025-06-26T21:04:23.799547431+05:30"
+generated: "2025-06-27T20:26:16.74077056+05:30"

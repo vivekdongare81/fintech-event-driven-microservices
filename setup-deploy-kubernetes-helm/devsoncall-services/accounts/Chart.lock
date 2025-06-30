@@ -3,4 +3,4 @@ dependencies:
   repository: file://../../devsoncall-common
   version: 0.1.0
 digest: sha256:01ea69e59b8181962b32da7244a51d92eef8026bffb30d519854a6bae92082fb
-generated: "2025-06-26T20:41:13.04827134+05:30"
+generated: "2025-06-30T12:24:47.303771699+05:30"

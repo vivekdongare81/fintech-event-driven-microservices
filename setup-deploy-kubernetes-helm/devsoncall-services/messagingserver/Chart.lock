@@ -1,0 +1,6 @@
+dependencies:
+- name: devsoncall-common
+  repository: file://../../devsoncall-common
+  version: 0.1.0
+digest: sha256:01ea69e59b8181962b32da7244a51d92eef8026bffb30d519854a6bae92082fb
+generated: "2025-06-30T12:26:05.632530662+05:30"

@@ -2,39 +2,26 @@
 
 set -e  # Stop script on any error
 
-# Define release names and chart paths
-echo "Starting full deployment..."
+echo "🚀 Starting full deployment..."
 
-# Common components
-echo "Installing devsoncall-common..."
-helm upgrade --install devsoncall-common ./devsoncall-common
+# 0. Build dependencies in top-level environment chart
+echo "🔄 Building Helm dependencies for dev-env..."
+helm dependency build ./environments/dev-env
 
-# Infrastructure tools
+# 1. Optional: Install common library chart (only if you need to test/use it separately)
+# ⚠️ If it's only used as a dependency and not deployed directly, skip this.
+# echo "🔧 Installing devsoncall-common..."
+# helm upgrade --install devsoncall-common ./devsoncall-common
+
+# 2. Core infrastructure components (uncomment as needed)
 for component in kafka grafana grafana-loki grafana-tempo keycloak kube-prometheus; do
-  echo "Installing $component..."
+  echo "🔧 Installing infra component: $component..."
   helm upgrade --install $component ./$component
 done
 
-# Devsoncall services
-services=(
-  accounts
-  cards
-  configserver
-  eurekaserver
-  gatewayserver
-  loans
-  messagingserver
-)
-
-for service in "${services[@]}"; do
-  echo "Installing service: $service..."
-  helm upgrade --install $service ./devsoncall-services/$service
-done
-
-# Environments - dev-env qa-env prod-env
-for env in dev-env; do
-  echo "Installing environment: $env..."
-  helm upgrade --install $env ./environments/$env
-done
+# 3. Deploy full environment using top-level umbrella chart
+#echo "🌍 Installing dev-env custom microservices environment and all dependencies..."
+#helm upgrade --install dev-env ./environments/dev-env
 
 echo "✅ All components and services installed successfully!"
+
