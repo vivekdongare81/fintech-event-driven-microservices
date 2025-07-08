@@ -34,7 +34,9 @@ services:
     extends:
       file: common-config.yml
       service: network-deploy-service
-          
+ 
+ ###################  Grafana, Loki/Zipkin, Prometheus - Disable others ########################
+
   read:
     image: grafana/loki:3.1.2
     command: "-config.file=/etc/loki/config.yaml -target=read"
