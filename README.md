@@ -45,10 +45,15 @@ This project is a **microservices-based fintech platform** built using an **even
 | Account Service       | 8081 | Handles user accounts          |
 | Card Service          | 8082 | Handles cards                  |
 | Loan Service          | 8083 | Handles loans                  |
-| Eureka Server         | ---- | Service registry               |
 | Config Server         | 8090 | Shared configuration           |
-| Rabbit MQ Server      | 8091 | Alerts to all Microservices    |
-| Notification Service  | ---- | Event-driven notifications     |
+| Eureka Server         | 8092 | Service registry               |
+| Notification Service  | 8093 | Event-driven notifications     |
+| Kafka Server          | 9092 | Communication between services |
+| Rabbit MQ             | 5672 | Alerts, Rate Limiting          |
+| Redis                 | 6379 | Alerts, Rate Limiting          |
+| Notification Service  | 8093 | Event-driven notifications     |
+| Keycloak auth Service | 8070 | Central customer management    |
+| Customer Service      | ---- | Central customer management    |
 | Customer Service      | ---- | Central customer management    |
 
 ---
