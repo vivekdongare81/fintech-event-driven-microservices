@@ -1,5 +1,6 @@
 package com.devsoncall.gatewayserver.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -18,17 +19,29 @@ import reactor.core.publisher.Mono;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity serverHttpSecurity) {
-        serverHttpSecurity.authorizeExchange(exchanges -> exchanges.pathMatchers(HttpMethod.GET).permitAll() // skip  All GET reqs
-                .pathMatchers("/devsoncall/accounts/**").hasRole("ACCOUNTS")
-                .pathMatchers("/devsoncall/cards/**").hasRole("CARDS")
-                .pathMatchers("/devsoncall/loans/**").hasRole("LOANS"))
-                .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
-                        .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor()))); // Keyclock oauth service
-        serverHttpSecurity.csrf(csrfSpec -> csrfSpec.disable()); //CSRF
-        return serverHttpSecurity.build();
-    }
+	@Value("${auth.enabled:true}")
+	private boolean authEnabled;
+	
+	@Bean
+	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity serverHttpSecurity) {
+	    if (!authEnabled) {
+	    	//Disable all auth when auth.enabled=false
+	    	serverHttpSecurity.authorizeExchange().anyExchange().permitAll(); // Skip all security
+	    } else {
+	    	serverHttpSecurity.authorizeExchange(exchanges -> exchanges
+	                .pathMatchers(HttpMethod.GET).permitAll()
+	                .pathMatchers("/devsoncall/accounts/**").hasRole("ACCOUNTS")
+	                .pathMatchers("/devsoncall/cards/**").hasRole("CARDS")
+	                .pathMatchers("/devsoncall/loans/**").hasRole("LOANS"))
+	            .oauth2ResourceServer(oauth2 -> oauth2
+	                .jwt(jwt -> jwt.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));
+	    }
+	   // Always disable CSRF for API Gateway
+	    serverHttpSecurity.csrf(ServerHttpSecurity.CsrfSpec::disable); 
+	    //serverHttpSecurity.csrf(csrfSpec -> csrfSpec.disable()); //CSRF
+	    
+	    return serverHttpSecurity.build();
+	}
 
     private Converter<Jwt, Mono<AbstractAuthenticationToken>> grantedAuthoritiesExtractor() {
         JwtAuthenticationConverter jwtAuthenticationConverter =

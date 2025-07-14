@@ -1,3 +1,6 @@
+auth:
+  enabled: false   # <== Toggle this to true in prod
+  
 spring:
   application:
     name: "gatewayserver"
